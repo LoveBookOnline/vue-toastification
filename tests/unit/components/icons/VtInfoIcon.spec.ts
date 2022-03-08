@@ -1,5 +1,4 @@
 import { mount } from "@vue/test-utils"
-
 import VtInfoIcon from "../../../../src/components/icons/VtInfoIcon.vue"
 
 describe("VtInfoIcon", () => {

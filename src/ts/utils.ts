@@ -1,12 +1,9 @@
 import { Component, defineComponent, toRaw, unref } from "vue"
-
-import type { BasePluginOptions } from "../types/plugin"
 import type {
   ToastComponent,
   ToastContent,
   RenderableToastContent,
-} from "../types/toast"
-import type { ToastContainerOptions } from "../types/toastContainer"
+} from "../types"
 
 interface DictionaryLike {
   [index: string]: unknown
@@ -63,15 +60,6 @@ const hasProp = <O, K extends PropertyKey>(
 ): obj is O & { [key in K]: unknown } =>
   (isObject(obj) || isFunction(obj)) && propKey in obj
 
-const getProp = <O, K extends PropertyKey, D>(
-  obj: O,
-  propKey: K,
-  fallback: D
-): K extends keyof O ? O[K] : D =>
-  (hasProp(obj, propKey) ? obj[propKey] : fallback) as K extends keyof O
-    ? O[K]
-    : D
-
 /**
  * ID generator
  */
@@ -126,43 +114,6 @@ const normalizeToastComponent = (obj: ToastContent): ToastContent => {
 
 const isBrowser = () => typeof window !== "undefined"
 
-const asContainerProps = (
-  options: BasePluginOptions
-): ToastContainerOptions => {
-  const {
-    position,
-    container,
-    newestOnTop,
-    maxToasts,
-    transition,
-    toastDefaults,
-    eventBus,
-    filterBeforeCreate,
-    filterToasts,
-    containerClassName,
-    ...defaultToastProps
-  } = options
-  const containerProps = {
-    position,
-    container,
-    newestOnTop,
-    maxToasts,
-    transition,
-    toastDefaults,
-    eventBus,
-    filterBeforeCreate,
-    filterToasts,
-    containerClassName,
-    defaultToastProps,
-  }
-  const keys = Object.keys(containerProps) as (keyof ToastContainerOptions)[]
-  keys.forEach(
-    key =>
-      typeof containerProps[key] === "undefined" && delete containerProps[key]
-  )
-  return containerProps
-}
-
 export {
   getId,
   getX,
@@ -178,6 +129,4 @@ export {
   isDOMRect,
   isFunction,
   isBrowser,
-  getProp,
-  asContainerProps,
 }

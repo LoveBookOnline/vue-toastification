@@ -1,63 +1,67 @@
 <template>
-  <div ref="el" :style="style" :class="cpClass" />
+  <div :style="style" :class="cpClass" />
 </template>
 
-<script lang="ts" setup>
-import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from "vue"
+<script lang="ts">
+import { defineComponent } from "vue"
 
 import { VT_NAMESPACE } from "../ts/constants"
-import { TOAST_DEFAULTS } from "../ts/propValidators"
+import PROPS from "../ts/propValidators"
 
-import type { BaseToastOptions } from "../types/toast"
+export default defineComponent({
+  name: "VtProgressBar",
 
-interface ProgressBarProps {
-  timeout?: BaseToastOptions["timeout"]
-  hideProgressBar?: BaseToastOptions["hideProgressBar"]
-  isRunning?: boolean
-}
+  props: PROPS.PROGRESS_BAR,
 
-const emit = defineEmits(["close-toast"])
-const props = withDefaults(defineProps<ProgressBarProps>(), {
-  hideProgressBar: TOAST_DEFAULTS.hideProgressBar,
-  isRunning: false,
-  timeout: TOAST_DEFAULTS.timeout,
-})
+  // TODO: The typescript compiler is not playing nice with emit types
+  // Rollback this change once ts is able to infer emit types
+  // emits: ["close-toast"],
 
-const el = ref<HTMLElement>()
-const hasClass = ref(true)
+  data() {
+    return {
+      hasClass: true,
+    }
+  },
 
-const style = computed(() => {
-  return {
-    animationDuration: `${props.timeout}ms`,
-    animationPlayState: props.isRunning ? "running" : "paused",
-    opacity: props.hideProgressBar ? 0 : 1,
-  }
-})
+  computed: {
+    style(): {
+      animationDuration: string
+      animationPlayState: string
+      opacity: number
+    } {
+      return {
+        animationDuration: `${this.timeout}ms`,
+        animationPlayState: this.isRunning ? "running" : "paused",
+        opacity: this.hideProgressBar ? 0 : 1,
+      }
+    },
 
-const cpClass = computed(() =>
-  hasClass.value ? `${VT_NAMESPACE}__progress-bar` : ""
-)
+    cpClass(): string {
+      return this.hasClass ? `${VT_NAMESPACE}__progress-bar` : ""
+    },
+  },
 
-watch(
-  () => props.timeout,
-  () => {
-    hasClass.value = false
-    nextTick(() => (hasClass.value = true))
-  }
-)
+  watch: {
+    timeout() {
+      this.hasClass = false
+      this.$nextTick(() => (this.hasClass = true))
+    },
+  },
 
-const animationEnded = () => emit("close-toast")
+  mounted() {
+    this.$el.addEventListener("animationend", this.animationEnded)
+  },
 
-onMounted(() => {
-  /* istanbul ignore else  */
-  if (el.value) {
-    el.value.addEventListener("animationend", animationEnded)
-  }
-})
-onBeforeUnmount(() => {
-  /* istanbul ignore else  */
-  if (el.value) {
-    el.value.removeEventListener("animationend", animationEnded)
-  }
+  beforeUnmount() {
+    this.$el.removeEventListener("animationend", this.animationEnded)
+  },
+
+  methods: {
+    animationEnded() {
+      // See TODO on line 16
+      // eslint-disable-next-line vue/require-explicit-emits
+      this.$emit("close-toast")
+    },
+  },
 })
 </script>

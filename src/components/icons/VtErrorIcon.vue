@@ -2,6 +2,9 @@
   <svg
     aria-hidden="true"
     focusable="false"
+    data-prefix="fas"
+    data-icon="exclamation-triangle"
+    class="svg-inline--fa fa-exclamation-triangle fa-w-18"
     role="img"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 576 512"
@@ -12,3 +15,6 @@
     ></path>
   </svg>
 </template>
+<script lang="ts">
+export default {}
+</script>

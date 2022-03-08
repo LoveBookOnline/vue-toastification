@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "target": "esnext",
-    "useDefineForClassFields": true,
+    "target": "ES2017",
     "sourceMap": true,
     "strict": true,
     "outDir": "dist",
@@ -16,21 +15,7 @@
     "jsx": "preserve",
     "types": ["@types/jest"],
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
+    "esModuleInterop": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "demo/**/*.ts",
-    "demo/**/*.d.ts",
-    "demo/**/*.tsx",
-    "demo/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.d.ts",
-    "tests/**/*.tsx",
-    "tests/**/*.vue"
-  ]
+  "include": ["src", "tests"]
 }

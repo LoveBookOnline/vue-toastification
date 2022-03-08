@@ -1,6 +1,5 @@
 /* eslint-disable vue/one-component-per-file */
 import { defineComponent, h, isProxy, isRef, reactive, ref } from "vue"
-
 import {
   getId,
   getX,
