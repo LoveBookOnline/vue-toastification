@@ -23,7 +23,7 @@
     "prepublishOnly": "yarn lint && yarn test && yarn build",
     "prepare": "husky install"
   },
-  "main": "dist/index.cjs",
+  "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "browser": {
     "./dist/index.cjs": "./dist/index.iife.min.js",
